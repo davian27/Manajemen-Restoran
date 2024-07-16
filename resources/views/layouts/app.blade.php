@@ -23,7 +23,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('', 'Manajemen Resto') }}
+                    {{ config('Manajemen Resto', 'Manajemen Resto') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -32,28 +32,21 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        <ul class="navbar-nav me-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('menus.index') }}">Menu</a>
-                            </li>
-                            <ul class="navbar-nav me-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('customers.index') }}">Customer</a>
-                                </li>
-                                <ul class="navbar-nav me-auto">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('orders.index') }}">Order</a>
-                                    </li>
-                                    <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('reservations.index') }}">Reservasi</a>
-                                    </li>
-                                </ul>
-                                <li class="nav-item">
-                                <a class="nav-link" href="{{ route('employees.index') }}">karyawan</a>
-                                </li>
-                            </ul>
-                            <!-- Tambahkan link lain sesuai kebutuhan -->
-                        </ul>
+                        <li class="nav-item">
+                            <a class="nav-link" id="menu-nav" href="{{ route('menus.index') }}">Menu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="customer-nav" href="{{ route('customers.index') }}">Customer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="order-nav" href="{{ route('orders.index') }}">Order</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="reservation-nav" href="{{ route('reservations.index') }}">Reservasi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="employee-nav" href="{{ route('employees.index') }}">Karyawan</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -105,6 +98,29 @@
             @yield('content')
         </main>
     </div>
+
+    <script>
+        // JavaScript to make navbar link active
+        document.addEventListener('DOMContentLoaded', function () {
+            const currentPath = window.location.pathname;
+
+            // Define path and corresponding element IDs
+            const navLinks = [
+                { path: '/menus', id: 'menu-nav' },
+                { path: '/customers', id: 'customer-nav' },
+                { path: '/orders', id: 'order-nav' },
+                { path: '/reservations', id: 'reservation-nav' },
+                { path: '/employees', id: 'employee-nav' }
+            ];
+
+            // Loop through the navLinks to find the current path
+            navLinks.forEach(link => {
+                if (currentPath.startsWith(link.path)) {
+                    document.getElementById(link.id).classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

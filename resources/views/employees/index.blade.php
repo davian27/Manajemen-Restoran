@@ -23,7 +23,7 @@
                 <th>No</th>
                 <th>Name</th>
                 <th>Position</th>
-                <th>Salary</th>
+                <th>Gaji Karyawan</th>
                 <th>Hired Date</th>
                 <th width="280px">Action</th>
             </tr>

@@ -52,7 +52,7 @@
 </div>
 <script>
     function confirmDelete() {
-        return confirm('Are you sure you want to delete this reservation?');
+        return confirm('Are you sure you want to delete this customer ?');
     }
 </script>
 @endsection

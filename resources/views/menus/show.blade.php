@@ -2,23 +2,25 @@
 
 @section('content')
 <div class="container">
-    <h1>Show Menu</h1>
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Name:</strong>
-                {{ $menu->name }}
-            </div>
+    <h1>Menu Details</h1>
+
+    <div class="card">
+        <div class="card-header">
+            <h2>Nama Menu : {{ $menu->name }}</h2>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Price:</strong>
-                {{ $menu->price }}
-            </div>
+        <div class="card-body">
+            <p><strong>Price:</strong> {{format_rupiah ($menu->price) }}</p>
+            @if($menu->photo)
+                <div>
+                    <strong>Photo:</strong><br>
+                    <img src="/{{ $menu->photo }}" alt="{{ $menu->name }}" class="img-fluid" width="300">
+                </div>
+            @endif
         </div>
-    </div>
-    <div class="pull-right">
-        <a class="btn btn-primary" href="{{ route('menus.index') }}">Back</a>
+        <div class="card-footer">
+            <a href="{{ route('menus.index') }}" class="btn btn-secondary">Back</a>
+            <a href="{{ route('menus.edit', $menu->id) }}" class="btn btn-primary">Edit</a>
+        </div>
     </div>
 </div>
 @endsection

@@ -6,7 +6,6 @@
 
     @if ($errors->any())
         <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -15,27 +14,26 @@
         </div>
     @endif
 
-    <form action="{{ route('menus.update', $menu->id) }}" method="POST">
+    <form action="{{ route('menus.update', $menu->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
-
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Name:</strong>
-                    <input type="text" name="name" value="{{ $menu->name }}" class="form-control" placeholder="Name">
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Price:</strong>
-                    <input type="number" name="price" value="{{ $menu->price }}" class="form-control" placeholder="Price">
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
+        <div class="form-group">
+            <label for="name">Menu Name:</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ $menu->name }}">
         </div>
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="text" class="form-control" id="price" name="price" value="{{ $menu->price }}">
+        </div>
+        <div class="form-group">
+            <label for="photo">Photo:</label>
+            <input type="file" class="form-control" id="photo" name="photo">
+            @if($menu->photo)
+                <img src="/{{ $menu->photo }}" alt="{{ $menu->name }}" width="100">
+            @endif
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{{ route('menus.index') }}" class="btn btn-secondary">Back</a>
     </form>
 </div>
 @endsection

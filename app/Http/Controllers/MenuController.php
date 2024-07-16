@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Menu;
-
+use Illuminate\Support\Facades\Storage;
 class MenuController extends Controller
 {
     /**
@@ -25,9 +25,19 @@ class MenuController extends Controller
         $request->validate([
             'name' => 'required|unique:menus',
             'price' => 'required|numeric',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        Menu::create($request->all());
+        $input = $request->all();
+
+        if ($photo = $request->file('photo')) {
+            $destinationPath = 'photos/';
+            $profileImage = date('YmdHis') . "." . $photo->getClientOriginalExtension();
+            $photo->move($destinationPath, $profileImage);
+            $input['photo'] = "$destinationPath$profileImage";
+        }
+
+        Menu::create($input);
 
         return redirect()->route('menus.index')
                         ->with('success', 'Menu created successfully.');
@@ -48,9 +58,26 @@ class MenuController extends Controller
         $request->validate([
             'name' => 'required|unique:menus,name,' . $menu->id,
             'price' => 'required|numeric',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $menu->update($request->all());
+        $input = $request->all();
+
+        if ($photo = $request->file('photo')) {
+            $destinationPath = 'photos/';
+            $profileImage = date('YmdHis') . "." . $photo->getClientOriginalExtension();
+            $photo->move($destinationPath, $profileImage);
+            $input['photo'] = "$destinationPath$profileImage";
+
+            // Delete old photo if exists
+            if ($menu->photo) {
+                Storage::delete($menu->photo);
+            }
+        } else {
+            unset($input['photo']);
+        }
+
+        $menu->update($input);
 
         return redirect()->route('menus.index')
                         ->with('success', 'Menu updated successfully.');
