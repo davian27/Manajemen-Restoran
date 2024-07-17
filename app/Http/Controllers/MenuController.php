@@ -25,7 +25,7 @@ class MenuController extends Controller
         $request->validate([
             'name' => 'required|unique:menus',
             'price' => 'required|numeric',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $input = $request->all();
@@ -58,7 +58,7 @@ class MenuController extends Controller
         $request->validate([
             'name' => 'required|unique:menus,name,' . $menu->id,
             'price' => 'required|numeric',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $input = $request->all();
@@ -85,7 +85,12 @@ class MenuController extends Controller
     
     public function destroy(Menu $menu)
     {
+        if ($menu->orders()->count() > 0) {
+            return redirect()->route('menus.index')
+                            ->with('alert', 'Data ini masih terhubung dengan halaman lain.');
+        }
         $menu->delete();
+        
 
         return redirect()->route('menus.index')
                         ->with('success', 'Menu deleted successfully.');
