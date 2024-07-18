@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\Menu;
 use App\Models\Order;
+use App\Models\Reservation;
 
 class CustomerController extends Controller
 {
@@ -63,7 +64,7 @@ class CustomerController extends Controller
     
     public function destroy(Customer $customer)
     {
-        if (Order::where('customer_id', $customer->id)->exists()) {
+        if (Order::where('customer_id', $customer->id)->exists() || (Reservation::where('customer_id', $customer->id)->exists())) {
             return redirect()->route('customers.index')
                              ->with('error', 'Customer cannot be deleted because it is associated with orders.');
         }

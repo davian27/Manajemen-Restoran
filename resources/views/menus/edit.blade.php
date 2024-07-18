@@ -28,9 +28,6 @@
         <div class="form-group">
             <label for="photo">Photo:</label>
             <input type="file" class="form-control" id="photo" name="photo">
-            @if($menu->photo)
-                <img src="/{{ $menu->photo }}" alt="{{ $menu->name }}" width="100">
-            @endif
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
         <a href="{{ route('menus.index') }}" class="btn btn-secondary">Back</a>

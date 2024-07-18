@@ -23,6 +23,7 @@
                 <th>No</th>
                 <th>Name</th>
                 <th>Price</th>
+                <th>Product Image</th>
                 <th width="280px">Action</th>
             </tr>
         </thead>
@@ -32,9 +33,9 @@
                     <td>{{ $menu->id }}</td>
                     <td>{{ $menu->name }}</td>
                     <td>{{format_rupiah ($menu->price) }}</td>
+                    <td><img width="100px" height="100px" src="{{ asset('storage/' . $menu->photo) }}" alt="{{ $menu->name }}" class="img-fluid"></td>
                     <td>
                     <form action="{{ route('menus.destroy', $menu->id) }}" method="POST" onsubmit="return confirmDelete()">
-                            <a class="btn btn-info" href="{{ route('menus.show', $menu->id) }}">Show</a>
                             <a class="btn btn-primary" href="{{ route('menus.edit', $menu->id) }}">Edit</a>
 
                             @csrf

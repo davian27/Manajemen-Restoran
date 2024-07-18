@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 use Illuminate\Support\Facades\Storage;
+
 class MenuController extends Controller
 {
     /**
@@ -33,7 +34,7 @@ class MenuController extends Controller
         if ($photo = $request->file('photo')) {
             $destinationPath = 'photos/';
             $profileImage = date('YmdHis') . "." . $photo->getClientOriginalExtension();
-            $photo->move($destinationPath, $profileImage);
+            $photo->storeAs($destinationPath, $profileImage, 'public');
             $input['photo'] = "$destinationPath$profileImage";
         }
 
@@ -63,16 +64,17 @@ class MenuController extends Controller
 
         $input = $request->all();
 
-        if ($photo = $request->file('photo')) {
-            $destinationPath = 'photos/';
-            $profileImage = date('YmdHis') . "." . $photo->getClientOriginalExtension();
-            $photo->move($destinationPath, $profileImage);
-            $input['photo'] = "$destinationPath$profileImage";
-
+        if ($request->hasFile('photo')) {
             // Delete old photo if exists
-            if ($menu->photo) {
-                Storage::delete($menu->photo);
+            if ($menu->photo && Storage::disk('public')->exists($menu->photo)) {
+                Storage::disk('public')->delete($menu->photo);
             }
+            
+            // Store new photo
+            $destinationPath = 'photos/';
+            $profileImage = date('YmdHis') . "." . $request->file('photo')->getClientOriginalExtension();
+            $request->file('photo')->storeAs($destinationPath, $profileImage, 'public');
+            $input['photo'] = "$destinationPath$profileImage";
         } else {
             unset($input['photo']);
         }
@@ -89,12 +91,16 @@ class MenuController extends Controller
             return redirect()->route('menus.index')
                             ->with('alert', 'Data ini masih terhubung dengan halaman lain.');
         }
+
+        // Delete the photo from storage
+        if ($menu->photo && Storage::disk('public')->exists($menu->photo)) {
+            Storage::disk('public')->delete($menu->photo);
+        }
+
         $menu->delete();
-        
 
         return redirect()->route('menus.index')
                         ->with('success', 'Menu deleted successfully.');
     }
 }
-
- ?>
+?>
